@@ -10,7 +10,6 @@ const model = new HiddenMarkovModel([
 	0.5
 ]);
 
-console.log(model);
 
-const evidenceSequence = [0, 0, 0];
-console.log(model.smoothing(evidenceSequence, 0));
+// To get the probabilities of all timestamps from 1 to 100
+console.log(model.overall([0, 0, 0], 0, 0));

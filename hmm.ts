@@ -5,15 +5,15 @@ export class HiddenMarkovModel {
 
 	constructor(transitionModel: number[][], sensorModel: number[][], priorProbability: number[]) {
 		if (!this.transitionModelIsValid(transitionModel)) {
-			throw "Invalid transition model";
+			throw new Error("Invalid transition model");
 		}
 
 		if (!this.sensorModelIsValid(sensorModel)) {
-			throw "Invalid sensor model";
+			throw new Error("Invalid sensor model");
 		}
 
 		if (!this.priorProbabilityIsValid(priorProbability, transitionModel.length)) {
-			throw "Invalid prior probability";
+			throw new Error("Invalid prior probability");
 		}
 
 		this.transitionModel = transitionModel.map(row => row.concat([1 - row.reduce((accumulator, currentValue) => accumulator + currentValue)]));
@@ -24,7 +24,7 @@ export class HiddenMarkovModel {
 	
 	private likelihoodOfEvidenceSequenceAndLastState(evidenceSequence: number[]): number[][] {
 		if (!this.evidenceSequenceIsValid(evidenceSequence)) {
-			throw `Evidence sequence - ${evidenceSequence.toString()} is invalid`;
+			throw new Error(`Evidence sequence - ${evidenceSequence.toString()} is invalid`);
 		}
 
 		const totalStates = this.transitionModel.length;
@@ -70,7 +70,7 @@ export class HiddenMarkovModel {
 
 	public filtering(evidenceSequence: number[]): number[][] {
 		if (!this.evidenceSequenceIsValid(evidenceSequence)) {
-			throw `Evidence sequence - ${evidenceSequence.toString()} is invalid`;
+			throw new Error(`Evidence sequence - ${evidenceSequence.toString()} is invalid`);
 		}
 
 		const totalStates = this.transitionModel.length;
@@ -101,11 +101,11 @@ export class HiddenMarkovModel {
 
 	public prediction(evidenceSequence: number[], futureTimeStamp: number): number[][] {
 		if (!this.evidenceSequenceIsValid(evidenceSequence)) {
-			throw "Invalid evidence sequence";
+			throw new Error("Invalid evidence sequence");
 		}
 
 		if (futureTimeStamp <= evidenceSequence.length - 1) {
-			throw `Future time stamp ${futureTimeStamp} is invalid for evidenceSequence length ${evidenceSequence.length}`;
+			throw new Error(`Future time stamp ${futureTimeStamp} is invalid for evidenceSequence length ${evidenceSequence.length}`);
 		}
 
 		const lookahead = futureTimeStamp - evidenceSequence.length + 1;
@@ -133,11 +133,11 @@ export class HiddenMarkovModel {
 
 	private fromStateToRemainingEvidence(evidenceSequence: number[], pastTimeStamp: number): number[][] {
 		if (!this.evidenceSequenceIsValid(evidenceSequence)) {
-			throw "Invalid evidence sequence";
+			throw new Error("Invalid evidence sequence");
 		}
 
 		if (pastTimeStamp < 0 || pastTimeStamp >= evidenceSequence.length - 1) {
-			throw `invalid past time stamp ${pastTimeStamp} for evidence sequence length ${evidenceSequence.length}`;
+			throw new Error(`invalid past time stamp ${pastTimeStamp} for evidence sequence length ${evidenceSequence.length}`);
 		}
 		
 		const totalStates = this.transitionModel.length;
@@ -160,11 +160,11 @@ export class HiddenMarkovModel {
 
 	public smoothing(evidenceSequence: number[], pastTimeStamp: number): number[][] {
 		if (!this.evidenceSequenceIsValid(evidenceSequence)) {
-			throw "Invalid evidence sequence";
+			throw new Error("Invalid evidence sequence");
 		}
 
 		if (pastTimeStamp < 0 || pastTimeStamp >= evidenceSequence.length - 1) {
-			throw `invalid past time stamp ${pastTimeStamp} for evidence sequence length ${evidenceSequence.length}`;
+			throw new Error(`invalid past time stamp ${pastTimeStamp} for evidence sequence length ${evidenceSequence.length}`);
 		}
 
 		const filteredResult = this.filtering(evidenceSequence);
@@ -187,11 +187,11 @@ export class HiddenMarkovModel {
 	
 	public overall(evidenceSequence: number[], fromTimeStamp: number, toTimeStamp: number): number[][] {
 		if (!this.evidenceSequenceIsValid(evidenceSequence)) {
-			throw "Invalid evidence sequence";
+			throw new Error("Invalid evidence sequence");
 		}
 
 		if (fromTimeStamp > toTimeStamp) {
-			throw `fromTimestamp ${fromTimeStamp} is greater than toTimeStamp ${toTimeStamp}`;
+			throw new Error(`fromTimestamp ${fromTimeStamp} is greater than toTimeStamp ${toTimeStamp}`);
 		}
 		
 		if (evidenceSequence.length - 1 < fromTimeStamp) {
