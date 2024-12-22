@@ -77,7 +77,7 @@ export class HiddenMarkovModel {
 		const f: number[][] = this.defineBlank2DArray(evidenceSequence.length, totalStates);
 		
 		for (let t = 0; t < evidenceSequence.length; ++t) {
-			const currentEvidence = evidenceSequence[0];
+			const currentEvidence = evidenceSequence[t];
 
 			for (let state = 0; state < totalStates; ++state) {
 
@@ -92,7 +92,7 @@ export class HiddenMarkovModel {
 					}
 				}
 			}
-			
+
 			f[t] = this.normalize(f[t]);
 		}
 		
@@ -248,14 +248,6 @@ export class HiddenMarkovModel {
 		if (priorProbability.length !== numberOfStates - 1) return false;
 		const total = priorProbability.reduce((accumulator, currentValue) => accumulator + currentValue);
 		return total <= 1;
-	}
-
-	private toStringFrom2DArray(array: number[][]): string {
-		return array.map(row => row.toString()).reduce((accumulator, currentValue) => accumulator + "\n" + currentValue, "");
-	}
-
-	public toString(): string {
-		return `transition model - ${this.toStringFrom2DArray(this.transitionModel)}\n\nsensor model - ${this.toStringFrom2DArray(this.sensorModel)}\n\nprior probabilities - ${this.priorProbabilities.toString()}`;
 	}
 
 	private defineBlank2DArray(rows: number, cols: number): number[][] {

@@ -10,4 +10,5 @@ const model = new HiddenMarkovModel([
 	0.5
 ]);
 
-console.log(model.overall([0, 0, 0], 0, 4));
+console.log(model);
+console.log(model.filtering([0, 1, 0]));
