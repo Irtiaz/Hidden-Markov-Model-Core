@@ -144,13 +144,13 @@ export class HiddenMarkovModel {
 		const b: number[][] = this.defineBlank2DArray(evidenceSequence.length - 1 - pastTimeStamp, totalStates);
 		
 		for (let t = evidenceSequence.length - 2; t >= pastTimeStamp; --t) {
-			const currentEvidence = evidenceSequence[t];
+			const nextEvidence = evidenceSequence[t + 1];
 			const i = t - evidenceSequence.length + b.length + 1;
 			const nextKnowledge: number[] = t === evidenceSequence.length - 2? new Array(totalStates).fill(1) : b[i + 1];
 			for (let state = 0; state < totalStates; ++state) {
 				b[i][state] = 0;
 				for (let nextState = 0; nextState < totalStates; ++nextState) {
-					b[i][state] += this.transitionModel[state][nextState] * this.sensorModel[nextState][currentEvidence] * nextKnowledge[nextState];
+					b[i][state] += this.transitionModel[state][nextState] * this.sensorModel[nextState][nextEvidence] * nextKnowledge[nextState];
 				}
 			}
 		}

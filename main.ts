@@ -11,4 +11,6 @@ const model = new HiddenMarkovModel([
 ]);
 
 console.log(model);
-console.log(model.filtering([0, 1, 0]));
+
+const evidenceSequence = [0, 0, 0];
+console.log(model.smoothing(evidenceSequence, 0));
